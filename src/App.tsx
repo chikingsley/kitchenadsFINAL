@@ -7,6 +7,7 @@ import Events from './pages/Events';
 import Careers from './pages/Careers';
 import SignUp from './pages/SignUp';
 import SignUpModal from './components/SignUpModal';
+import ScrollToTop from './components/ScrollToTop';
 
 const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,6 +17,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="flex flex-col min-h-screen">
         <Header openModal={openModal} />
         <main className="flex-grow">
