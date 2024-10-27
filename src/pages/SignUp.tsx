@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import SignUpForm from '../components/SignUpForm'
+import { Helmet } from 'react-helmet-async'
 
 const SignUp: React.FC = () => {
   const [message, setMessage] = useState<string | null>(null);
@@ -28,16 +29,22 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-4">Ready to Start Cooking with KitchenAds - Sign Up Now!</h1>
-      <p className="mb-8">Join our network and start serving premium crypto traffic</p>
-      {message && (
-        <div className={`p-4 mb-4 ${message.includes('error') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-          {message}
-        </div>
-      )}
-      <SignUpForm onSubmit={handleSignUp} />
-    </div>
+    <>
+      <Helmet>
+        <title>Sign Up | KitchenAds</title>
+        <meta name="description" content="Join KitchenAds network today. Connect with premium crypto traffic sources and take your marketing to the next level." />
+      </Helmet>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-4">Ready to Start Cooking with KitchenAds - Sign Up Now!</h1>
+        <p className="mb-8">Join our network and start serving premium crypto traffic</p>
+        {message && (
+          <div className={`p-4 mb-4 ${message.includes('error') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+            {message}
+          </div>
+        )}
+        <SignUpForm onSubmit={handleSignUp} />
+      </div>
+    </>
   )
 }
 

@@ -8,6 +8,7 @@ import Careers from './pages/Careers';
 import SignUp from './pages/SignUp';
 import SignUpModal from './components/SignUpModal';
 import ScrollToTop from './components/ScrollToTop';
+import { HelmetProvider } from 'react-helmet-async';
 
 const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,21 +17,23 @@ const App: React.FC = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="flex flex-col min-h-screen">
-        <Header openModal={openModal} />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home openModal={openModal} />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/sign-up" element={<SignUp />} />
-          </Routes>
-        </main>
-        <Footer openModal={openModal} />
-        <SignUpModal isOpen={isModalOpen} onClose={closeModal} />
-      </div>
+    <HelmetProvider>
+      <Router>
+        <ScrollToTop />
+        <div className="flex flex-col min-h-screen">
+          <Header openModal={openModal} />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home openModal={openModal} />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="/sign-up" element={<SignUp />} />
+            </Routes>
+          </main>
+          <Footer openModal={openModal} />
+          <SignUpModal isOpen={isModalOpen} onClose={closeModal} />
+        </div>
+      </HelmetProvider>
     </Router>
   );
 };

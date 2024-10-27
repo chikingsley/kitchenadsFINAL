@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getUnsplashImage } from '../lib/unsplash'
+import { Helmet } from 'react-helmet-async'
 
 interface Job {
   title: string
@@ -64,38 +65,44 @@ const Careers: React.FC = () => {
   }, []) // The effect will only run once when the component mounts
 
   return (
-    <div className="bg-gray-100 py-20">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-12">Join Our Kitchen Crew</h1>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          At KitchenAds, we're always looking for talented individuals to join our team of crypto culinary experts. If you're passionate about digital marketing, cryptocurrency, and creating delicious results for our clients, we want to hear from you!
-        </p>
-        <div className="space-y-12">
-          {jobs.map((job, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-8">
-              {job.imageUrl && (
-                <img 
-                  src={job.imageUrl} 
-                  alt={job.title}
-                  className="w-full h-48 object-cover rounded-lg mb-6"
-                />
-              )}
-              <h2 className="text-2xl font-bold mb-4">{job.title}</h2>
-              <p className="text-gray-600 mb-6">{job.description}</p>
-              <h3 className="text-xl font-semibold mb-4">Requirements:</h3>
-              <ul className="list-disc list-inside text-gray-600 mb-6">
-                {job.requirements.map((req, reqIndex) => (
-                  <li key={reqIndex}>{req}</li>
-                ))}
-              </ul>
-              <button className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Apply Now
-              </button>
-            </div>
-          ))}
+    <>
+      <Helmet>
+        <title>Join Our Team | KitchenAds</title>
+        <meta name="description" content="Build your career at KitchenAds. We're hiring talented affiliate managers and marketing professionals in the cryptocurrency industry." />
+      </Helmet>
+      <div className="bg-gray-100 py-20">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl font-bold text-center mb-12">Join Our Kitchen Crew</h1>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            At KitchenAds, we're always looking for talented individuals to join our team of crypto culinary experts. If you're passionate about digital marketing, cryptocurrency, and creating delicious results for our clients, we want to hear from you!
+          </p>
+          <div className="space-y-12">
+            {jobs.map((job, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md p-8">
+                {job.imageUrl && (
+                  <img 
+                    src={job.imageUrl} 
+                    alt={job.title}
+                    className="w-full h-48 object-cover rounded-lg mb-6"
+                  />
+                )}
+                <h2 className="text-2xl font-bold mb-4">{job.title}</h2>
+                <p className="text-gray-600 mb-6">{job.description}</p>
+                <h3 className="text-xl font-semibold mb-4">Requirements:</h3>
+                <ul className="list-disc list-inside text-gray-600 mb-6">
+                  {job.requirements.map((req, reqIndex) => (
+                    <li key={reqIndex}>{req}</li>
+                  ))}
+                </ul>
+                <button className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                  Apply Now
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

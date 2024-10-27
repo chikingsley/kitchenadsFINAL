@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getUnsplashImage } from '../lib/unsplash'
+import { Helmet } from 'react-helmet-async'
 
 interface Event {
   name: string
@@ -56,34 +57,40 @@ const Events: React.FC = () => {
   }, [])
 
   return (
-    <div className="bg-gray-100 py-20">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold mb-12">Upcoming Conferences</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {events.map((event, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="relative h-48">
-                {event.imageUrl && (
-                  <img 
-                    src={event.imageUrl} 
-                    alt={event.name} 
-                    className="w-full h-full object-cover"
-                  />
-                )}
+    <>
+      <Helmet>
+        <title>Industry Events | KitchenAds</title>
+        <meta name="description" content="Join KitchenAds at major crypto and affiliate marketing events worldwide. Meet our team at conferences in Las Vegas, Bangkok, and more." />
+      </Helmet>
+      <div className="bg-gray-100 py-20">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl font-bold mb-12">Upcoming Conferences</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {events.map((event, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="relative h-48">
+                  {event.imageUrl && (
+                    <img 
+                      src={event.imageUrl} 
+                      alt={event.name} 
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold mb-2">{event.name}</h2>
+                  <p className="text-gray-600 mb-4">{event.date}</p>
+                  <p className="text-gray-600 mb-4">{event.location}</p>
+                  <p className="text-teal-600 font-semibold">
+                    KitchenAds Investment: {event.investment}
+                  </p>
+                </div>
               </div>
-              <div className="p-6">
-                <h2 className="text-2xl font-bold mb-2">{event.name}</h2>
-                <p className="text-gray-600 mb-4">{event.date}</p>
-                <p className="text-gray-600 mb-4">{event.location}</p>
-                <p className="text-teal-600 font-semibold">
-                  KitchenAds Investment: {event.investment}
-                </p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
