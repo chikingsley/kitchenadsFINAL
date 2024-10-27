@@ -1,43 +1,83 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { getUnsplashImage } from '../lib/unsplash'
 
-const events = [
+interface Event {
+  name: string
+  imageQuery: string
+  imageUrl?: string
+  date: string
+  location: string
+  investment: string
+}
+
+const eventData: Event[] = [
   {
-    name: 'Crypto Kitchen Conference',
-    logo: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    date: 'September 15-17, 2023',
-    location: 'New York, NY',
-    investment: 'Sponsor',
+    name: 'Affiliate World Asia',
+    imageQuery: 'bangkok night',  // This gets a nice Bangkok skyline
+    date: 'December 4-5, 2024',
+    location: 'Bangkok, Thailand',
+    investment: 'Attendee',
   },
   {
-    name: 'Blockchain Bistro Summit',
-    logo: 'https://images.unsplash.com/photo-1559523161-0fc0d8b38a7a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    date: 'October 5-7, 2023',
-    location: 'London, UK',
-    investment: 'Speaker',
-  },
-  {
-    name: 'Crypto Culinary Expo',
-    logo: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-    date: 'November 20-22, 2023',
-    location: 'Singapore',
+    name: 'Affiliate Summit Vegas',
+    imageQuery: 'las vegas',  // Changed to get a more iconic Vegas view
+    date: 'February 3-5, 2025',
+    location: 'Caesars Forum, Las Vegas, NV',
     investment: 'Attendee',
   },
 ]
 
 const Events: React.FC = () => {
+  const [events, setEvents] = useState<Event[]>(eventData)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const loadImages = async () => {
+    setIsLoading(true)
+    try {
+      const updatedEvents = await Promise.all(
+        eventData.map(async (event) => {
+          const imageUrl = await getUnsplashImage(event.imageQuery)
+          return {
+            ...event,
+            imageUrl: imageUrl || '/fallback-image.jpg',
+          }
+        })
+      )
+      setEvents(updatedEvents)
+    } catch (error) {
+      console.error('Error loading images:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadImages()
+  }, [])
+
   return (
     <div className="bg-gray-100 py-20">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-12">Upcoming Crypto Conferences</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <h1 className="text-4xl font-bold mb-12">Upcoming Conferences</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {events.map((event, index) => (
             <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <img src={event.logo} alt={event.name} className="w-full h-48 object-cover" />
+              <div className="relative h-48">
+                {event.imageUrl && (
+                  <img 
+                    src={event.imageUrl} 
+                    alt={event.name} 
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
               <div className="p-6">
                 <h2 className="text-2xl font-bold mb-2">{event.name}</h2>
                 <p className="text-gray-600 mb-4">{event.date}</p>
                 <p className="text-gray-600 mb-4">{event.location}</p>
-                <p className="text-teal-600 font-semibold">KitchenAds Investment: {event.investment}</p>
+                <p className="text-teal-600 font-semibold">
+                  KitchenAds Investment: {event.investment}
+                </p>
               </div>
             </div>
           ))}

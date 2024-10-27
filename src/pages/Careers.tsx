@@ -1,39 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { getUnsplashImage } from '../lib/unsplash'
 
-const jobs = [
+interface Job {
+  title: string
+  imageQuery: string
+  imageUrl?: string
+  description: string
+  requirements: string[]
+}
+
+const jobData: Job[] = [
   {
-    title: 'Brand Account Manager',
-    description: 'As a Brand Account Manager at KitchenAds, you\'ll be the master chef of client relationships, cooking up strategies to help our partners achieve their goals. You\'ll blend your expertise in digital marketing with a dash of crypto knowledge to create the perfect recipe for success.',
-    requirements: [
-      'Minimum 3 years of experience in digital marketing or account management',
-      'Strong understanding of the cryptocurrency and blockchain industry',
-      'Excellent communication and presentation skills',
-      'Ability to analyze data and make data-driven decisions',
-    ],
+    title: 'Senior Affiliate Manager',
+    imageQuery: 'sales girl',
+    description: 'Lead our affiliate marketing initiatives as a Senior Affiliate Manager in the dynamic cryptocurrency space. Youll be responsible for developing and executing strategic partnership programs, managing a team of junior managers, and driving significant revenue growth through innovative affiliate campaigns. Your role will be crucial in expanding our market presence and establishing KitchenAds as a leader in crypto marketing.',
+    requirements: ['5+ years of experience in affiliate marketing, with at least 2 years in the cryptocurrency or fintech sector',
+      'Proven track record of successfully scaling affiliate programs and achieving revenue targets',
+      'Experience managing and mentoring junior team members',
+      'Deep understanding of cryptocurrency markets, blockchain technology, and DeFi concepts',
+      'Strong analytical skills with experience in data-driven decision making',
+      'Excellent relationship management and negotiation skills',
+      'Proficiency with affiliate tracking platforms and marketing analytics tools',
+      'Bachelors degree in Marketing, Business, or related field; MBA is a plus',
+      'Experience with international markets and multi-language campaigns',
+      'Knowledge of regulatory compliance in crypto marketing'],
   },
   {
-    title: 'Affiliate Manager',
-    description: 'Our Affiliate Managers are the sous chefs of our operation, expertly preparing and managing our network of affiliates. You\'ll be responsible for sourcing high-quality traffic ingredients and ensuring they\'re perfectly seasoned to meet our clients\' needs.',
+    title: 'Junior Affiliate Manager',
+    imageQuery: 'digital marketing office',
+    description: 'Join our dynamic team as a Junior Affiliate Manager, where youll learn to navigate the exciting intersection of cryptocurrency and affiliate marketing. Youll work closely with senior team members to develop and maintain affiliate relationships, analyze campaign performance, and contribute to the growth of our crypto-focused marketing initiatives.',
     requirements: [
-      'Proven experience in affiliate marketing, preferably in the crypto space',
-      'Strong negotiation and relationship-building skills',
-      'Analytical mindset with the ability to interpret performance metrics',
-      'Familiarity with affiliate tracking platforms and tools',
+      'Bachelor\'s degree in Marketing, Business, or related field',
+      'Understanding of cryptocurrency and blockchain technology',
+      '1-2 years of experience in digital marketing or affiliate marketing',
+      'Strong communication and relationship-building skills',
+      'Analytical mindset with attention to detail',
+      'Proficiency in Excel and data analysis tools',
+      'Ability to learn new technologies and adapt quickly',
+      'Experience with affiliate networks and tracking platforms is a plus'
     ],
   },
-  {
-    title: 'Data Analyst',
-    description: 'As a Data Analyst at KitchenAds, you\'ll be our kitchen scientist, experimenting with data to uncover insights that will help us serve up the best possible results for our clients. You\'ll dive deep into the numbers to identify trends, optimize campaigns, and ensure we\'re always using the freshest ingredients in our marketing recipes.',
-    requirements: [
-      'Bachelor\'s degree in Statistics, Mathematics, Computer Science, or related field',
-      'Proficiency in SQL, Python, or R for data analysis',
-      'Experience with data visualization tools (e.g., Tableau, PowerBI)',
-      'Strong problem-solving skills and attention to detail',
-    ],
-  },
+  // Add more jobs as needed
 ]
 
 const Careers: React.FC = () => {
+  const [jobs, setJobs] = useState<Job[]>(jobData)
+
+  useEffect(() => {
+    const loadImages = async () => {
+      const updatedJobs = await Promise.all(
+        jobData.map(async (job) => {
+          const imageUrl = await getUnsplashImage(job.imageQuery)
+          return {
+            ...job,
+            imageUrl: imageUrl || '/fallback-image.jpg',
+          }
+        })
+      )
+      setJobs(updatedJobs)
+    }
+
+    loadImages()
+  }, []) // The effect will only run once when the component mounts
+
   return (
     <div className="bg-gray-100 py-20">
       <div className="container mx-auto px-4">
@@ -44,6 +73,13 @@ const Careers: React.FC = () => {
         <div className="space-y-12">
           {jobs.map((job, index) => (
             <div key={index} className="bg-white rounded-lg shadow-md p-8">
+              {job.imageUrl && (
+                <img 
+                  src={job.imageUrl} 
+                  alt={job.title}
+                  className="w-full h-48 object-cover rounded-lg mb-6"
+                />
+              )}
               <h2 className="text-2xl font-bold mb-4">{job.title}</h2>
               <p className="text-gray-600 mb-6">{job.description}</p>
               <h3 className="text-xl font-semibold mb-4">Requirements:</h3>
