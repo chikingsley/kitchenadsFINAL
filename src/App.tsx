@@ -17,8 +17,8 @@ const App: React.FC = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <HelmetProvider>
-      <Router>
+    <Router>
+      <HelmetProvider>
         <ScrollToTop />
         <div className="flex flex-col min-h-screen">
           <Header openModal={openModal} />
