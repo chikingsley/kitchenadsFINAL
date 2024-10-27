@@ -13,6 +13,7 @@ import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
 import SignupThankYou from './SignupThankYou';
+import { sendTelegramMessage } from '../api/telegram';
 
 interface SignUpModalProps {
   isOpen: boolean;
@@ -48,11 +49,6 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted');
-    console.log('Environment variables:', {
-      botToken: import.meta.env.VITE_TELEGRAM_BOT_TOKEN,
-      chatId: import.meta.env.VITE_TELEGRAM_CHAT_ID
-    });
     
     const message = `
 🆕 New Sign Up Request
@@ -72,33 +68,7 @@ ${formData.message}
 `;
 
     try {
-      console.log('Sending request to Telegram...');
-      const telegramUrl = `https://api.telegram.org/bot${import.meta.env.VITE_TELEGRAM_BOT_TOKEN}/sendMessage`;
-      console.log('Telegram URL:', telegramUrl);
-      
-      const requestBody = {
-        chat_id: import.meta.env.VITE_TELEGRAM_CHAT_ID,
-        text: message,
-      };
-      console.log('Request body:', requestBody);
-
-      const response = await fetch(telegramUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      console.log('Response:', response);
-      const responseData = await response.json();
-      console.log('Response data:', responseData);
-
-      if (!response.ok) {
-        throw new Error(`Failed to send message: ${responseData.description}`);
-      }
-
-      console.log('Message sent successfully');
+      await sendTelegramMessage(message);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Error sending message:', error);
